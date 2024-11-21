@@ -47,7 +47,7 @@ const wndApi = client.getTypedApi(wnd);
 const testTransfer = (api, user, pdp) => {
   const transfer = api.tx.Balances.transfer_allow_death({
     dest: MultiAddress.Id(user),
-    value: 12345n,
+    value: 10n ** 10n,
   });
 
   transfer.signSubmitAndWatch(pdp).subscribe({
@@ -59,7 +59,9 @@ const testTransfer = (api, user, pdp) => {
       }
     },
     error: console.error,
-    complete: () => console.log("Complete!"),
+    complete() {
+      console.log("Complete!");
+    },
   });
 };
 
