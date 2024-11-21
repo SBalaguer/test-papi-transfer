@@ -17,13 +17,13 @@ const client = createClient(
 //crear la private key con randon de ed255..
 
 const PDP_SIGNER = getPolkadotSigner(
-  process.env.PDP_PUBLIC_2,
+  ed25519.getPublicKey(process.env.PDP_PRIVATE_2),
   "Ed25519",
   (call) => ed25519.sign(call, process.env.PDP_PRIVATE_2)
 );
 
 const USER_SIGNER = getPolkadotSigner(
-  process.env.USER_PUBLIC_2,
+  ed25519.getPublicKey(process.env.USER_PRIVATE_2),
   "Ed25519",
   (call) => ed25519.sign(call, process.env.USER_PRIVATE_2)
 );
@@ -44,8 +44,6 @@ const USER_SIGNER = getPolkadotSigner(
 
 const wndApi = client.getTypedApi(wnd);
 
-testTransfer(wndApi, process.env.USER_PUBLIC_ADDRESS_2, PDP_SIGNER);
-
 const testTransfer = (api, user, pdp) => {
   const transfer = api.tx.Balances.transfer_allow_death({
     dest: MultiAddress.Id(user),
@@ -65,4 +63,4 @@ const testTransfer = (api, user, pdp) => {
   });
 };
 
-main();
+testTransfer(wndApi, process.env.USER_PUBLIC_ADDRESS_2, PDP_SIGNER);
